@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <ProjectGuid>{F52A356D-87E0-4501-A845-24CBC4A0EFF4}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <AssemblyName>ePlus.InvoiceAuto</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ePlus.MetaData">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.MetaData.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.CommonEx">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.CommonEx.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="ePlus.Dictionary.BusinessObjects">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Dictionary.BusinessObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="ePlus.Invoice.Server">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Invoice.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Invoice.BusinessObjects">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Invoice.BusinessObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Dictionary.Client">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Dictionary.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Common">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Dictionary.Server">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Dictionary.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Interfaces">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Server.Core">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Server.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Movement.BusinessObjects">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Movement.BusinessObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Movement.Server">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Movement.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="ePlus.Pricing.Compilation">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Pricing.Compilation.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Contracts">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="ePlus.Request">
+      <HintPath>.\ePlus.InvoiceAutoReferences\ePlus.Request.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormDT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDT.Designer.cs">
+      <DependentUpon>FormDT.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\InvoiceAutoByInvoiceAction.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\InvoiceAutoLotItem.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\InvoiceAuto.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\InvoiceAutoItem.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\InvoiceAuto_BL.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="AssemblyDateAttribute.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\Properties\Resources.Designer.cs">
+      <AutoGen>true</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTimeSharedInput>true</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\Properties\Settings.cs">
+      <AutoGen>false</AutoGen>
+      <DesignTimeSharedInput>false</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ePlus.InvoiceAuto\InvoiceAutoForm.Designer.cs">
+      <AutoGen>true</AutoGen>
+      <DependentUpon>InvoiceAutoForm.resx</DependentUpon>
+      <DesignTimeSharedInput>true</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="ePlus.InvoiceAuto\Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ePlus.InvoiceAuto\InvoiceAutoForm.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceAutoForm.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDT.resx">
+      <DependentUpon>FormDT.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
