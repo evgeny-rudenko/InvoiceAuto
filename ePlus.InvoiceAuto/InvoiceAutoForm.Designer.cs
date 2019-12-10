@@ -72,6 +72,15 @@ namespace ePlus.InvoiceAuto
 
 		private Button buttonRefreshCols;
 
+        /// <summary>
+        /// чтобы не писать две строчки 
+        /// </summary>
+        /// <param name="st"></param>
+        public void LogTrace (String st)
+        {
+            var logger = new SimpleLogger();
+            logger.Trace(st);
+        }
 		public InvoiceAutoForm()
 		{
 			this.InitializeComponent();
@@ -96,7 +105,7 @@ namespace ePlus.InvoiceAuto
 			{
 				return;
 			}
-			if (this.invoiceAuto.Items.Count == 0 || MessageBox.Show("Выполнить распределение по складам?", "Подтверждение", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
+			if (this.invoiceAuto.Items.Count == 0 || MessageBox.Show("Создать документы перемещения?", "Подтверждение", MessageBoxButtons.YesNo) != System.Windows.Forms.DialogResult.Yes)
 			{
 				return;
 			}
@@ -157,7 +166,8 @@ namespace ePlus.InvoiceAuto
 
 		private void buttonRefreshCols_Click(object sender, EventArgs e)
 		{
-			this.TransformData();
+             //this.chStore.CheckedItems 2019
+            this.TransformData();
 		}
 
 		private void buttonStore_Click(object sender, EventArgs e)
@@ -237,15 +247,49 @@ namespace ePlus.InvoiceAuto
 
 		private void fromStore_Click(object sender, EventArgs e)
 		{
-			if (this.pluginBox1.RowItem.Id == (long)0)
+           
+            long IdStoreTo = 0;
+            // нажимаем на выбор склада "Откуда"
+            if (this.pluginBox1.RowItem.Id == (long)0)
 			{
 				return;
 			}
-			this.plInvoice.SetId((long)0);
+
+            ///Заполняем содержимое таблицы ниже
+            
+            foreach (object itemChecked in this.chStore.CheckedItems)
+            {
+
+                STORE item = (STORE)itemChecked;
+                IdStoreTo = item.ID_STORE;
+                LogTrace("Нашли склад " +item.NAME ); // отладка
+                break;
+                #region кусок из заполнения документа
+                //STORE item = (STORE)this.chStore.Items[i];
+                /*MOVEMENT mOVEMENT = new MOVEMENT()
+                {
+                    MNEMOCODE = DOCUMENT_DALC.GetDocumentNumber((long)8),
+                    DOCUMENT_STATE = (new DocumentState((EDocumentState)((long)1))).Mnemocode,
+                    ID_STORE_FROM = this.pluginBox1.Id,
+                    ID_STORE_TO = item.ID_STORE,
+                    DATE = DateTime.Now
+                };*/
+                #endregion
+            }
+
+
+            this.plInvoice.SetId((long)0);
 			InvoiceAuto_BL invoiceAutoBL = new InvoiceAuto_BL();
-			this.invoiceAuto.Items.Clear();
-			this.invoiceAuto.Items.AddRange(invoiceAutoBL.ListRest(this.pluginBox1.RowItem.Id));
-			this.TransformData();
+			this.invoiceAuto.Items.Clear(); // очистка таблицы
+			 if (IdStoreTo > 0)
+            {
+                this.invoiceAuto.Items.AddRange(invoiceAutoBL.ListRest(this.pluginBox1.RowItem.Id,IdStoreTo));
+            }
+            else { this.invoiceAuto.Items.AddRange(invoiceAutoBL.ListRest(this.pluginBox1.RowItem.Id)); }
+            
+			
+            
+            this.TransformData();
 		}
 
 		private void grdItems_GridCellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -402,7 +446,7 @@ namespace ePlus.InvoiceAuto
 			this.bMove.Name = "bMove";
 			this.bMove.Size = new System.Drawing.Size(101, 23);
 			this.bMove.TabIndex = 0;
-			this.bMove.Text = "Распределить";
+			this.bMove.Text = "Создать док.";
 			this.bMove.UseVisualStyleBackColor = true;
 			this.bMove.Click += new EventHandler(this.bMove_Click);
 			this.buttonCancel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -425,9 +469,9 @@ namespace ePlus.InvoiceAuto
 			this.buttonRefreshCols.Name = "buttonRefreshCols";
 			this.buttonRefreshCols.Size = new System.Drawing.Size(76, 24);
 			this.buttonRefreshCols.TabIndex = 1;
-			this.buttonRefreshCols.Text = "Обновить";
+			this.buttonRefreshCols.Text = "Расчет";
 			this.buttonRefreshCols.UseVisualStyleBackColor = true;
-			this.buttonRefreshCols.Visible = false;
+			this.buttonRefreshCols.Visible = true;
 			this.buttonRefreshCols.Click += new EventHandler(this.buttonRefreshCols_Click);
 			base.AutoScaleDimensions = new SizeF(6f, 13f);
 			base.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -440,7 +484,7 @@ namespace ePlus.InvoiceAuto
 			base.MinimizeBox = true;
 			this.MinimumSize = new System.Drawing.Size(670, 365);
 			base.Name = "InvoiceAutoForm";
-			this.Text = "Автонакладные";
+			this.Text = "Распределение товара";
 			base.Load += new EventHandler(this.InvoiceAutoForm_Load);
 			this.panel1.ResumeLayout(false);
 			this.panel3.ResumeLayout(false);
@@ -455,7 +499,8 @@ namespace ePlus.InvoiceAuto
 		{
 			this.storeDict.Clear();
 			ePlus.Dictionary.Server.STORE_BL bL = (ePlus.Dictionary.Server.STORE_BL)BLProvider.Instance.GetBL(typeof(ePlus.Dictionary.Server.STORE_BL));
-			ArrayList arrayLists = bL.List("DATE_DELETED IS NULL");
+			
+            ArrayList arrayLists = bL.List("DATE_DELETED IS NULL");
 			for (int i = 0; i < arrayLists.Count; i++)
 			{
 				STORE item = (STORE)arrayLists[i];
@@ -588,10 +633,10 @@ namespace ePlus.InvoiceAuto
 					{
 						string columnName = column.ColumnName;
 						string str = columnName;
-						if (columnName != null && (str == "ID_LOT" || str == "GOODS_NAME" || str == "SCALING" || str == "STORE_QUANTITY" || str == "LEFT_QUANTITY") || !int.TryParse(column.ColumnName, out num) || num < 0 || num >= item.Quantities.Count)
+						if (columnName != null && (str == "ID_LOT" || str == "GOODS_NAME" || str == "SCALING" || str == "SOLD" || str == "REMAIN" || str == "STORE_QUANTITY" || str == "LEFT_QUANTITY") || !int.TryParse(column.ColumnName, out num) || num < 0 || num >= item.Quantities.Count)
 						{
 							continue;
-						}
+						} 
 						item.Quantities[num] = (decimal)row[column];
 					}
 				}
@@ -645,7 +690,7 @@ namespace ePlus.InvoiceAuto
 					{
 						string columnName = column.ColumnName;
 						string str = columnName;
-						if (columnName != null && (str == "ID_LOT" || str == "GOODS_NAME" || str == "SCALING" || str == "STORE_QUANTITY" || str == "LEFT_QUANTITY") || !int.TryParse(column.ColumnName, out num) || num < 0 || num >= invoiceAutoItem.Quantities.Count)
+						if (columnName != null && (str == "ID_LOT" || str == "GOODS_NAME" || str == "SCALING" || str == "REMAIN" || str == "SOLD" || str == "STORE_QUANTITY" || str == "LEFT_QUANTITY") || !int.TryParse(column.ColumnName, out num) || num < 0 || num >= invoiceAutoItem.Quantities.Count)
 						{
 							continue;
 						}
@@ -661,7 +706,12 @@ namespace ePlus.InvoiceAuto
 			dataTable.Columns.Add("SCALING", typeof(string)).ReadOnly = true;
 			dataTable.Columns.Add("STORE_QUANTITY", typeof(decimal)).ReadOnly = true;
 			dataTable.Columns.Add("LEFT_QUANTITY", typeof(decimal));
-			if (this.invoiceAuto.Items.Count > 0)
+
+            /*2019*/
+            dataTable.Columns.Add("SOLD", typeof(decimal)).ReadOnly = true; //  продано за месяц в аптеке
+            dataTable.Columns.Add("REMAIN", typeof(decimal)).ReadOnly = true;// сколько осталось в аптеке
+            /*2019*/
+            if (this.invoiceAuto.Items.Count > 0)
 			{
 				InvoiceAutoItem item1 = this.invoiceAuto.Items[0];
 				for (int j = 0; j < item1.Quantities.Count; j++)
@@ -742,8 +792,25 @@ namespace ePlus.InvoiceAuto
 						dataGridViewColumn1.ReadOnly = true;
 						continue;
 					}
-				}
-				if (!int.TryParse(dataGridViewColumn1.DataPropertyName, out num1) || !this.storeDict.ContainsKey(num1))
+                    else if (str1 == "SOLD")
+                    {
+                        dataGridViewColumn1.HeaderText = "Продано";
+                        dataGridViewColumn1.DisplayIndex = 4;
+                        dataGridViewColumn1.Frozen = true;
+                        dataGridViewColumn1.ReadOnly = true;
+                        continue;
+                    }
+                    else if (str1 == "REMAIN")
+                    {
+                        dataGridViewColumn1.HeaderText = "Остаток в аптеке";
+                        dataGridViewColumn1.DisplayIndex = 5;
+                        dataGridViewColumn1.Frozen = true;
+                        dataGridViewColumn1.ReadOnly = true;
+                        continue;
+                    }
+                }
+				//название склада в заголовок колонки
+                if (!int.TryParse(dataGridViewColumn1.DataPropertyName, out num1) || !this.storeDict.ContainsKey(num1))
 				{
 					continue;
 				}
@@ -756,7 +823,11 @@ namespace ePlus.InvoiceAuto
 				idParty["GOODS_NAME"] = invoiceAutoItem1.Goods_name;
 				idParty["SCALING"] = invoiceAutoItem1.Scale_ratio_name;
 				idParty["STORE_QUANTITY"] = invoiceAutoItem1.Store_quantity;
-				for (int k = 0; k < invoiceAutoItem1.Quantities.Count; k++)
+                
+                idParty["SOLD"] = invoiceAutoItem1.Sold;
+                idParty["REMAIN"] = invoiceAutoItem1.Remain;
+
+                for (int k = 0; k < invoiceAutoItem1.Quantities.Count; k++)
 				{
 					if (!this.chStore.GetItemChecked(k))
 					{

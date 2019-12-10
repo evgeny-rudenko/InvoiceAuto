@@ -17,6 +17,10 @@ namespace ePlus.InvoiceAuto
 		private string goods_name;
 
 		private decimal store_quantity;
+        
+        private decimal remain;
+        
+        private decimal sold;
 
 		private List<decimal> quantities = new List<decimal>();
 
@@ -110,6 +114,29 @@ namespace ePlus.InvoiceAuto
 			}
 		}
 
+        public decimal Remain
+        {
+            get
+            {
+                return this.remain;
+            }
+            set
+            {
+                this.remain = value;
+            }
+        }
+
+        public decimal Sold
+        {
+            get 
+            {
+                return this.sold;
+            }
+            set
+            {
+                this.sold = value;
+            }
+        }
 		public InvoiceAutoItem()
 		{
 		}

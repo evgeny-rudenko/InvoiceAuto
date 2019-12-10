@@ -31,5 +31,19 @@ namespace ePlus.InvoiceAuto
 			object[] idStore = new object[] { id_store };
 			return sqlLoader.GetList(str, idStore);
 		}
-	}
+        public List<InvoiceAutoItem> ListRest(long id_store, long id_store_to)
+        {
+            var logger = new SimpleLogger();
+            /*2019  расчет перемещения товара*/
+            string str = "exec USP_INVOICE_AUTO_REST_2 {0}, null, {1}";
+            //str = str.Replace("{0}", id_store.ToString());
+            //str = str.Replace("{1}", id_store_to.ToString());
+            logger.Trace("Запускаем выборку по складу  " + str);
+
+            SqlLoader<InvoiceAutoItem> sqlLoader = this.loader;
+            object[] idStore = new object[] { id_store, id_store_to };
+            return sqlLoader.GetList(str, idStore);
+            //return sqlLoader.GetList(str);
+        }
+    }
 }

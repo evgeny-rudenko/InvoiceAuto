@@ -12,7 +12,7 @@ using System.Runtime.Versioning;
 [assembly: AssemblyProduct("F3 TAIL")]
 [assembly: AssemblyTitle("")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyVersion("3.5.0.0")]
+[assembly: AssemblyVersion("3.6.0.0")]
 [assembly: CompilationRelaxations(8)]
 [assembly: Debuggable(DebuggableAttribute.DebuggingModes.IgnoreSymbolStoreSequencePoints)]
 [assembly: RuntimeCompatibility(WrapNonExceptionThrows=true)]

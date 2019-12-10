@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\F3TailZDOR\IADLL\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>false</Optimize>
@@ -130,6 +130,7 @@
       <DependentUpon>InvoiceAutoForm.resx</DependentUpon>
       <DesignTimeSharedInput>true</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SimpleLogger.cs" />
     <EmbeddedResource Include="ePlus.InvoiceAuto\Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -142,5 +143,11 @@
       <DependentUpon>FormDT.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="loggerreadme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y C:\F3TailZDOR\IADLL\ePlus.InvoiceAuto.dll C:\F3TAIL\Client\ePlus.InvoiceAuto.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>
