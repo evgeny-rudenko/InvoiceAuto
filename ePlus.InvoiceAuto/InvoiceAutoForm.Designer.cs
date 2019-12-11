@@ -130,11 +130,15 @@ namespace ePlus.InvoiceAuto
 					MOVEMENT_ITEM mOVEMENTITEM = new MOVEMENT_ITEM()
 					{
 						ID_LOT_FROM = invoiceAutoItem.Id_party,
-						QUANTITY = invoiceAutoItem.Quantities[i]
+						QUANTITY = invoiceAutoItem.Quantities[i] 
 					};
-					mOVEMENT.Items.Add(mOVEMENTITEM);
+
+                   // mOVEMENTITEM.QUANTITY = Math.Floor(mOVEMENTITEM.QUANTITY); //2019 почему то попадают десятичные значения в количество
+                    mOVEMENT.Items.Add(mOVEMENTITEM);
 				}
-				if (mOVEMENT.Items.Count > 0)
+				
+                
+                if (mOVEMENT.Items.Count > 0)
 				{
 					num++;
 					(new MOVEMENT_BL()).Save(mOVEMENT);
@@ -664,6 +668,69 @@ namespace ePlus.InvoiceAuto
 			this.grdItems.BindingSource.ResetCurrentItem();
 		}
 
+        /// <summary>
+        /// Расчет заказа для одной аптеки
+        /// Добиваем остатки до месяца 2019
+        /// </summary>
+        private void Zakaz ()
+        {
+
+            int storeidx=0;
+            for (int i = 0; i < this.chStore.Items.Count; i++)
+            {
+
+             if (this.chStore.GetItemCheckState(i) == CheckState.Checked)
+                {
+                    storeidx = i;
+                }
+            }
+
+
+                String GoodName = "";
+            int remain = 0;
+            int sold = 0;
+            int zakaz = 0;
+          
+            foreach (InvoiceAutoItem item in this.invoiceAuto.Items)
+            {
+                item.Quantities.Clear();
+                for (int i = 0; i < this.chStore.Items.Count; i++)
+                {
+
+                    item.Quantities.Add(new decimal(0));
+
+                }
+                if (GoodName!=item.Goods_name)
+                {
+                    //новая строка для расчета 
+                    GoodName = item.Goods_name;
+                    remain =(int) item.Remain;
+                    sold = (int)item.Sold;
+                    if (remain < sold)
+                    { zakaz =  sold - remain; }
+                    else
+                    { zakaz = 0; }
+                      
+
+                }
+                if (zakaz>0 && item.Scale_ratio_name.Contains("1/1")) // распределяем только целые упаковки
+                {
+                    if (item.Store_quantity >= zakaz)
+                    {
+                        //item.Quantities.Add(zakaz);
+                        item.Quantities[storeidx] = zakaz;
+                        zakaz = 0;
+                    }
+                    else
+                    {
+                        item.Quantities[storeidx]=item.Store_quantity;
+                        zakaz = zakaz -(int)item.Store_quantity;
+                    }
+                }
+                
+            }
+        }
+
 		private void TransformData()
 		{
 			int num;
@@ -676,6 +743,12 @@ namespace ePlus.InvoiceAuto
 					item.Quantities.Add(new decimal(0));
 				}
 			}
+
+            /// 2019
+            /// простой расчет заказа
+            Zakaz(); 
+
+
 			DataTable dataSource = this.grdItems.DataSource as DataTable;
 			if (dataSource != null)
 			{

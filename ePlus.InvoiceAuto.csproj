@@ -131,6 +131,7 @@
       <DesignTimeSharedInput>true</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SimpleLogger.cs" />
+    <Compile Include="Zakaz.cs" />
     <EmbeddedResource Include="ePlus.InvoiceAuto\Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -145,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="loggerreadme.txt" />
+    <Content Include="SQL\USP_INVOICE.SQL" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
