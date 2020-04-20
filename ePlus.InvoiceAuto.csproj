@@ -147,6 +147,7 @@
   <ItemGroup>
     <Content Include="loggerreadme.txt" />
     <Content Include="SQL\USP_INVOICE.SQL" />
+    <Content Include="SQL\USP_INVOICE_AUTO2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

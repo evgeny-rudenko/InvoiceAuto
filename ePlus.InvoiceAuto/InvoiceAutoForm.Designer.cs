@@ -706,12 +706,30 @@ namespace ePlus.InvoiceAuto
                     GoodName = item.Goods_name;
                     remain =(int) item.Remain;
                     sold = (int)item.Sold;
-                    if (remain < sold)
-                    { zakaz =  sold - remain; }
+                    if (remain < Math.Ceiling( ((decimal)sold) /2)) // заказываем только то, что меньше двух недель
+                    { 
+						zakaz =  sold - remain; 
+					}
                     else
-                    { zakaz = 0; }
-                      
-
+                    {
+						zakaz = 0; 
+					}
+                    
+					//кусок логики для работы с маленькими количествами
+					if (sold == 1 && remain ==0)
+					{
+						zakaz = 1;
+					}
+					if (sold ==2 && remain ==0)
+					{
+						zakaz = 2;
+					}
+					if (sold ==2 && remain==1)
+					{
+						zakaz = 1;
+					}
+					//кусок логики закончился
+					//без него не всегда правильно округляются количества для заказа
                 }
                 if (zakaz>0 && item.Scale_ratio_name.Contains("1/1")) // распределяем только целые упаковки
                 {
