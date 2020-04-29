@@ -4,6 +4,9 @@ using ePlus.CommonEx;
 using ePlus.CommonEx.Base;
 using ePlus.CommonEx.Controls;
 using ePlus.CommonEx.StockFilter.New;
+
+using ePlus.Client.Core; // using ePlus.Client.Core.OptionsEx; где то там есть функция чтения системных параметров
+
 using ePlus.Dictionary.BusinessObjects;
 using ePlus.Dictionary.Server;
 using ePlus.Interfaces;
@@ -674,8 +677,18 @@ namespace ePlus.InvoiceAuto
         /// </summary>
         private void Zakaz ()
         {
+			// тут мы берем коэффициент, для некоторых случаев, когда нужно раздать чуть больше или чуть меньше
+			int KoefZakaz = 1;
+			try { 
+				 KoefZakaz = int.Parse( SysOption.GetValue("INVOICEAUTO")); //  получение параметра из системных настроек. 
+				}
+			catch (Exception e)
+			{
+				KoefZakaz = 1;
+			}
 
-            int storeidx=0;
+			//MessageBox.Show(KoefZakaz.ToString());
+			int storeidx=0;
             for (int i = 0; i < this.chStore.Items.Count; i++)
             {
 
@@ -690,7 +703,9 @@ namespace ePlus.InvoiceAuto
             int remain = 0;
             int sold = 0;
             int zakaz = 0;
-          
+
+			//sold = sold * (KoefZakaz / 100);
+
             foreach (InvoiceAutoItem item in this.invoiceAuto.Items)
             {
                 item.Quantities.Clear();
@@ -706,9 +721,17 @@ namespace ePlus.InvoiceAuto
                     GoodName = item.Goods_name;
                     remain =(int) item.Remain;
                     sold = (int)item.Sold;
-                    if (remain < Math.Ceiling( ((decimal)sold) /2)) // заказываем только то, что меньше двух недель
-                    { 
-						zakaz =  sold - remain; 
+
+					
+					if (remain < Math.Ceiling( ((decimal)sold) /2)) // заказываем только то, что меньше двух недель
+                    {
+						//zakaz =  sold - remain; 
+						zakaz = sold * KoefZakaz / 100 - remain;
+						//sold = sold * (KoefZakaz / 100);
+						if (zakaz<0)
+						{
+							zakaz = 0;
+						}
 					}
                     else
                     {

@@ -151,6 +151,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y C:\F3TailZDOR\IADLL\ePlus.InvoiceAuto.dll C:\F3TAIL\Client\ePlus.InvoiceAuto.dll</PostBuildEvent>
+    <PostBuildEvent>copy /y C:\F3TailZDOR\IADLL\ePlus.InvoiceAuto.dll C:\F3TAILzdor\Client\ePlus.InvoiceAuto.dll</PostBuildEvent>
   </PropertyGroup>
 </Project>
