@@ -597,6 +597,7 @@ namespace ePlus.InvoiceAuto
 			return false;
 		}
 
+
 		private void plInvoice_ValueChanged()
 		{
 			if (this.plInvoice.RowItem.Id == (long)0)
@@ -609,6 +610,8 @@ namespace ePlus.InvoiceAuto
 			this.TransformData();
 		}
 
+
+		//выбрали накладную ?
 		private void pluginBox1_ValueChanged()
 		{
 			this.invoiceAuto.Items.Clear();
@@ -621,6 +624,7 @@ namespace ePlus.InvoiceAuto
 				this.chStore.SetItemCheckState(i, CheckState.Unchecked);
 			}
 			this.TransformData();
+			//Добавил обновление
 		}
 
 		private void SyncItems()
